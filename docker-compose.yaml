@@ -15,7 +15,7 @@ services:
     cap_add:
       - NET_ADMIN
     ports:
-      - 2456:1194/udp
+      - 1194:1194/udp
     restart: unless-stopped
     volumes:
       - ./openvpn:/etc/openvpn
@@ -69,7 +69,24 @@ services:
     networks:
       minecraft:
         ipv4_address: 192.168.100.2
-
+        
+  minecraft_forge:
+    container_name: minecraft_forge
+    image: itzg/minecraft-server
+    ports:
+      - 25565:25565/tcp
+    environment:
+      EULA: "TRUE"
+      MEMORY: "10G"
+      TYPE: "FORGE"
+      VERSION: "1.19.2"
+      FORGE_VERSION: "43.2.14"
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+    volumes:
+      - ./minecraft_forge:/datab
+      
   valheim:
     container_name: valheim
     image: lloesche/valheim-server
