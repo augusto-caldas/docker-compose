@@ -73,3 +73,15 @@ services:
     volumes:
       - ./valheim/config:/config
       - ./valheim/data:/opt/valheim
+      
+  zomboid:
+    container_name: zomboid
+    image: afey/zomboid
+    ports:
+      - 8766:8766/udp
+    environment:
+      SERVER_NAME: "box"
+      SERVER_PASSWORD: <password>
+    restart: unless-stopped
+    volumes:
+      - ./zomboid:/server-data
