@@ -9,6 +9,17 @@ networks:
           gateway: 192.168.0.1
 
 services:
+  openvpn:
+    container_name: openvpn
+    image: kylemanna/openvpn
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 2456:1194/udp
+    restart: unless-stopped
+    volumes:
+      - ./openvpn:/etc/openvpn
+
   infrared:
     container_name: infrared
     image: ghcr.io/haveachin/infrared:latest
@@ -64,24 +75,26 @@ services:
     image: lloesche/valheim-server
     ports:
       - 2456-2457:2456-2457/udp
+    env_file:
+      - ./secrets/valheim.env
     environment:
       - SERVER_NAME=box
       - WORLD_NAME=Back
-      - SERVER_PASS= <password>
       - SERVER_PUBLIC=0
     restart: unless-stopped
     volumes:
       - ./valheim/config:/config
       - ./valheim/data:/opt/valheim
-      
+
   zomboid:
     container_name: zomboid
     image: afey/zomboid
     ports:
       - 8766:8766/udp
+    env_file:
+      - ./secrets/zomboid.env
     environment:
       SERVER_NAME: "box"
-      SERVER_PASSWORD: <password>
     restart: unless-stopped
     volumes:
       - ./zomboid:/server-data
