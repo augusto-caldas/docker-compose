@@ -1,0 +1,60 @@
+version: "3"
+
+networks:
+  minecraft:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.0.0/16
+          gateway: 192.168.0.1
+
+services:
+  infrared:
+    container_name: infrared
+    image: ghcr.io/haveachin/infrared:latest
+    environment:
+      INFRARED_CONFIG_PATH: "/configs"
+    ports:
+      - 25565:25565/tcp
+    networks:
+      minecraft:
+        ipv4_address: 192.168.1.1
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+    volumes:
+      - ./infrared:/configs
+
+  minecraft_spigot:
+    container_name: minecraft_spigot
+    image: itzg/minecraft-server
+    environment:
+      EULA: "TRUE"
+      MEMORY: "7G"
+      TYPE: "SPIGOT"
+      VERSION: "1.20.1"
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+    volumes:
+      - ./minecraft_spigot:/data
+    networks:
+      minecraft:
+        ipv4_address: 192.168.100.1
+
+  minecraft_spigot_back:
+    container_name: minecraft_spigot_back
+    image: itzg/minecraft-server
+    environment:
+      EULA: "TRUE"
+      MEMORY: "7G"
+      TYPE: "SPIGOT"
+      VERSION: "1.20.1"
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+    volumes:
+      - ./minecraft_spigot_back:/data
+    networks:
+      minecraft:
+        ipv4_address: 192.168.100.2
