@@ -58,3 +58,18 @@ services:
     networks:
       minecraft:
         ipv4_address: 192.168.100.2
+
+  valheim:
+    container_name: valheim
+    image: lloesche/valheim-server
+    ports:
+      - 2456-2457:2456-2457/udp
+    environment:
+      - SERVER_NAME=box
+      - WORLD_NAME=Back
+      - SERVER_PASS= <password>
+      - SERVER_PUBLIC=0
+    restart: unless-stopped
+    volumes:
+      - ./valheim/config:/config
+      - ./valheim/data:/opt/valheim
