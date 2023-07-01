@@ -9,17 +9,6 @@ networks:
           gateway: 192.168.0.1
 
 services:
-  openvpn:
-    container_name: openvpn
-    image: kylemanna/openvpn
-    cap_add:
-      - NET_ADMIN
-    ports:
-      - 1194:1194/udp
-    restart: unless-stopped
-    volumes:
-      - ./openvpn:/etc/openvpn
-
   infrared:
     container_name: infrared
     image: ghcr.io/haveachin/infrared:latest
@@ -51,7 +40,7 @@ services:
       - ./minecraft_spigot:/data
     networks:
       minecraft:
-        ipv4_address: 192.168.100.1
+        ipv4_address: 192.168.1.100
 
   minecraft_spigot_back:
     container_name: minecraft_spigot_back
@@ -68,7 +57,7 @@ services:
       - ./minecraft_spigot_back:/data
     networks:
       minecraft:
-        ipv4_address: 192.168.100.2
+        ipv4_address: 192.168.1.101
         
   minecraft_forge:
     container_name: minecraft_forge
