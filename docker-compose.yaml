@@ -49,6 +49,17 @@ services:
     volumes:
       - ./openvpn-tcp:/etc/openvpn
 
+  jellyfin:
+    container_name: jellyfin
+    image: jellyfin/jellyfin:latest
+    ports:
+      - 80:8096/tcp
+    restart: unless-stopped
+    volumes:
+      - ./jellyfin/config:/config
+      - ./jellyfin/cache:/cache
+      - ./jellyfin/media:/media
+
   minecraft_spigot:
     container_name: minecraft_spigot
     image: itzg/minecraft-server
