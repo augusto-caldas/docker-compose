@@ -5,8 +5,8 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 192.168.0.0/16
-          gateway: 192.168.0.1
+        - subnet: 192.168.1.0/24
+          gateway: 192.168.1.1
 
 services:
   infrared:
@@ -18,12 +18,36 @@ services:
       - 25565:25565/tcp
     networks:
       minecraft:
-        ipv4_address: 192.168.1.1
+        ipv4_address: 192.168.1.2
     tty: true
     stdin_open: true
     restart: unless-stopped
     volumes:
       - ./infrared:/configs
+
+  openvpn:
+    container_name: openvpn
+    image: kylemanna/openvpn
+    cap_add:
+      - NET_ADMIN
+    network_mode: bridge
+    ports:
+      - 1194:1194/udp
+    restart: unless-stopped
+    volumes:
+      - ./openvpn:/etc/openvpn
+
+  openvpn-tcp:
+    container_name: openvpn-tcp
+    image: kylemanna/openvpn
+    cap_add:
+      - NET_ADMIN
+    network_mode: bridge
+    ports:
+      - 443:443/tcp
+    restart: unless-stopped
+    volumes:
+      - ./openvpn-tcp:/etc/openvpn
 
   minecraft_spigot:
     container_name: minecraft_spigot
@@ -35,6 +59,8 @@ services:
       VERSION: "1.20.1"
     tty: true
     stdin_open: true
+    ports:
+      - 19132:19132/udp
     restart: unless-stopped
     volumes:
       - ./minecraft_spigot:/data
@@ -52,13 +78,15 @@ services:
       VERSION: "1.20.1"
     tty: true
     stdin_open: true
+    ports:
+      - 19132:19132/udp
     restart: unless-stopped
     volumes:
       - ./minecraft_spigot_back:/data
     networks:
       minecraft:
         ipv4_address: 192.168.1.101
-        
+
   minecraft_forge:
     container_name: minecraft_forge
     image: itzg/minecraft-server
@@ -75,7 +103,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./minecraft_forge:/datab
-      
+
   valheim:
     container_name: valheim
     image: lloesche/valheim-server
