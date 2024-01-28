@@ -1,0 +1,91 @@
+version: "3"
+
+networks:
+  minecraft:
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24
+          gateway: 192.168.1.1
+
+services:
+  infrared:
+    container_name: infrared
+    image: ghcr.io/haveachin/infrared:latest
+    environment:
+      INFRARED_CONFIG_PATH: "/configs"
+    ports:
+      - 25565:25565/tcp
+    networks:
+      - minecraft
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+    volumes:
+      - ./infrared:/configs
+
+  minecraft_spigot:
+    container_name: minecraft-spigot
+    image: itzg/minecraft-server
+    environment:
+      EULA: "TRUE"
+      MAX_MEMORY: "12G"
+      TYPE: "SPIGOT"
+      VERSION: "1.20.4"
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+    volumes:
+      - ./minecraft_spigot:/data
+    networks:
+      - minecraft
+
+  minecraft_spigot_back:
+    container_name: minecraft-spigot-back
+    image: itzg/minecraft-server
+    environment:
+      EULA: "TRUE"
+      MAX_MEMORY: "12G"
+      TYPE: "SPIGOT"
+      VERSION: "1.20.1"
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+    volumes:
+      - ./minecraft_spigot_back:/data
+    networks:
+      - minecraft
+
+  minecraft_spigot_opti:
+    container_name: minecraft-spigot-opti
+    image: itzg/minecraft-server
+    ports:
+      - 19132:19132
+    environment:
+      EULA: "TRUE"
+      MAX_MEMORY: "12G"
+      TYPE: "SPIGOT"
+      VERSION: "1.20.4"
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+    volumes:
+      - ./minecraft_spigot_opti:/data
+    networks:
+      - minecraft
+
+  minecraft_forge:
+    container_name: minecraft-forge
+    image: itzg/minecraft-server
+    environment:
+      EULA: "TRUE"
+      MAX_MEMORY: "14G"
+      TYPE: "FORGE"
+      VERSION: "1.19"
+      FORGE_VERSION: "41.1.0"
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+    volumes:
+      - ./minecraft_forge:/data
+    networks:
+      - minecraft

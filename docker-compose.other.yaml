@@ -1,0 +1,53 @@
+version: "3"
+
+services:
+  valheim:
+    container_name: valheim
+    image: lloesche/valheim-server:latest
+    ports:
+      - 2456-2457:2456-2457/udp
+    env_file:
+      - ./secrets/valheim.env
+    environment:
+      - SERVER_NAME=box
+      - WORLD_NAME=DDERPG
+      - SERVER_PUBLIC=0
+    restart: unless-stopped
+    volumes:
+      - ./valheim/config:/config
+      - ./valheim/data:/opt/valheim
+
+  zomboid:
+    container_name: zomboid
+    image: afey/zomboid
+    ports:
+      - 8766:8766/udp
+    env_file:
+      - ./secrets/zomboid.env
+    environment:
+      SERVER_NAME: "box"
+    restart: unless-stopped
+    volumes:
+      - ./zomboid:/server-data
+
+  palworld:
+    container_name: palworld
+    image: thijsvanloef/palworld-server-docker:latest
+    ports:
+      - 8211:8211/udp
+    env_file:
+      - ./secrets/palworld.env
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - PORT=8211
+      - PLAYERS=5
+      - MULTITHREADING=true
+      - RCON_ENABLED=true
+      - RCON_PORT=25575
+      - TZ=UTC
+      - COMMUNITY=false
+      - SERVER_NAME="Box"
+    restart: unless-stopped
+    volumes:
+      - ./palworld:/palworld
