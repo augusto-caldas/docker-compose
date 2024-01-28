@@ -19,7 +19,7 @@ services:
 
   zomboid:
     container_name: zomboid
-    image: afey/zomboid
+    image: afey/zomboid:latest
     ports:
       - 8766:8766/udp
     env_file:
@@ -47,7 +47,7 @@ services:
       - RCON_PORT=25575
       - TZ=UTC
       - COMMUNITY=false
-      - SERVER_NAME="Box"
+      - SERVER_NAME="box"
     restart: unless-stopped
     volumes:
       - ./palworld:/palworld
