@@ -47,7 +47,17 @@ services:
       - RCON_PORT=25575
       - TZ=UTC
       - COMMUNITY=false
-      - SERVER_NAME="box"
+      - SERVER_NAME=box
     restart: unless-stopped
     volumes:
       - ./palworld:/palworld
+
+  terraria:
+    container_name: terraria
+    image: ryshe/terraria:latest
+    ports:
+      - 7777:7777
+    volumes:
+      - ./terraria/worlds:/root/.local/share/Terraria/Worlds
+      - ./terraria/plugins:/plugins
+    restart: unless-stopped
