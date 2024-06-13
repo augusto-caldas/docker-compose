@@ -61,3 +61,5 @@ services:
       - ./terraria/worlds:/root/.local/share/Terraria/Worlds
       - ./terraria/plugins:/plugins
     restart: unless-stopped
+    environment:
+      WORLD_FILENAME: munduen.wld
