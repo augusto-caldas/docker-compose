@@ -63,3 +63,20 @@ services:
     restart: unless-stopped
     environment:
       WORLD_FILENAME: munduen.wld
+
+  enshrouded:
+    container_name: enshrouded
+    image: mornedhels/enshrouded-server:latest
+    ports:
+      - 15637:15637/udp
+    volumes:
+      - ./enshrouded:/opt/enshrouded
+    restart: unless-stopped
+    env_file:
+      - ./secrets/enshrouded.env
+    environment:
+      - SERVER_NAME=box
+      - PUID=4711
+      - PGID=4711
+    hostname: enshrouded
+    stop_grace_period: 90s
