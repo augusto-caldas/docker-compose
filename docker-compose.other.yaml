@@ -10,7 +10,7 @@ services:
       - ./secrets/valheim.env
     environment:
       - SERVER_NAME=box
-      - WORLD_NAME=DDERPG
+      - WORLD_NAME=box
       - SERVER_PUBLIC=0
     restart: unless-stopped
     volumes:
